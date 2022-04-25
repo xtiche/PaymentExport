@@ -134,6 +134,7 @@ page 50201 "PTE Bank Extract Buffer"
         GenJnlLine.SetRange("Journal Template Name", ExportBuffer."Journal Template Name");
         GenJnlLine.SetRange("Journal Batch Name", ExportBuffer."Journal Batch Name");
 
+        ExportBuffer.SetRange(Recognized, false);
         if ExportBuffer.FindSet() then
             repeat
                 GenJnlLine.SetRange("Posting Date", ExportBuffer.Date);
