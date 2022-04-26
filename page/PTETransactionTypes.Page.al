@@ -1,7 +1,7 @@
 page 50200 "PTE Transaction Types"
 {
     ApplicationArea = All;
-    Caption = 'PTE Transaction Types';
+    Caption = 'Transaction Types';
     PageType = List;
     SourceTable = "PTE Transaction Type";
     UsageCategory = Lists;
