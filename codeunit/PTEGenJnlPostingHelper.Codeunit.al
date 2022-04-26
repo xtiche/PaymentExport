@@ -19,4 +19,15 @@ codeunit 50201 "PTE Gen. Jnl Posting Helper"
         BankAccountLedgerEntry."Unique ID" := GenJournalLine."Unique ID";
     end;
 
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Gen. Jnl.-Post", 'OnBeforeCode', '', false, false)]
+    local procedure OnBeforeCodeGenJnlPost(var GenJournalLine: Record "Gen. Journal Line"; var HideDialog: Boolean)
+    var
+        GenJnlTemplate: Record "Gen. Journal Template";
+    begin
+        if GenJnlTemplate.Get(GenJournalLine."Journal Template Name") and
+            (GenJnlTemplate."Page ID" = Page::"Payment Journal")
+        then
+            GenJournalLine.TestField("ACH Status", GenJournalLine."ACH Status"::Paid);
+    end;
+
 }

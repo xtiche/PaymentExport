@@ -21,6 +21,8 @@ tableextension 50201 "PTE Bank Acc. Recon. Line" extends "Bank Acc. Reconciliati
         {
             Caption = 'Transation Type';
             DataClassification = CustomerContent;
+            TableRelation = "PTE Transaction Type";
+            ValidateTableRelation = true;
         }
         field(50204; "ACH Batch No."; Code[20])
         {

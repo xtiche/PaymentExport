@@ -5,7 +5,7 @@ table 50200 "PTE Transaction Type"
 
     fields
     {
-        field(1; "Code"; Code[10])
+        field(1; "Code"; Code[20])
         {
             Caption = 'Code';
             DataClassification = CustomerContent;
@@ -25,7 +25,7 @@ table 50200 "PTE Transaction Type"
         field(30; System; Option)
         {
             Caption = 'System';
-            OptionMembers = "ACH","Wire";
+            OptionMembers = ACH,Wire;
             OptionCaption = 'ACH,Wire';
             DataClassification = CustomerContent;
         }

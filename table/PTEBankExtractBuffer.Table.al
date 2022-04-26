@@ -66,6 +66,8 @@ table 50201 "PTE Bank Extract Buffer"
         {
             Caption = 'Transaction Code';
             DataClassification = CustomerContent;
+            TableRelation = "PTE Transaction Type";
+            ValidateTableRelation = true;
         }
         field(80; Class; Text[100])
         {
