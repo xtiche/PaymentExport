@@ -37,6 +37,11 @@ page 50200 "PTE Transaction Types"
                     ToolTip = 'Specifies the value of the System field.';
                     ApplicationArea = All;
                 }
+                field("ACH Prefix"; Rec."ACH Prefix")
+                {
+                    ToolTip = 'Specifies the value of the ACH Prefix field.';
+                    ApplicationArea = All;
+                }
             }
         }
     }

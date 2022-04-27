@@ -34,6 +34,11 @@ table 50200 "PTE Transaction Type"
             Caption = 'Note';
             DataClassification = CustomerContent;
         }
+        field(50; "ACH Prefix"; Text[10])
+        {
+            Caption = 'ACH Prefix';
+            DataClassification = CustomerContent;
+        }
     }
     keys
     {
