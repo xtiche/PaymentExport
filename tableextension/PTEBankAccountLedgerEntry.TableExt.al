@@ -22,5 +22,15 @@ tableextension 50204 "PTE Bank Account Ledger Entry" extends "Bank Account Ledge
             Caption = 'ACH Batch Total';
             DataClassification = CustomerContent;
         }
+        field(50204; "Related Party No."; Code[20])
+        {
+            Caption = 'Related Party No.';
+            DataClassification = CustomerContent;
+        }
+        field(50205; "Related Party Name"; Text[100])
+        {
+            Caption = 'Related Party Name';
+            DataClassification = CustomerContent;
+        }
     }
 }

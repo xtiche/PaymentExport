@@ -24,6 +24,18 @@ pageextension 50204 "PTEBank Account Ledger Entries" extends "Bank Account Ledge
                 ApplicationArea = All;
                 Editable = false;
             }
+            field("Related Party No."; Rec."Related Party No.")
+            {
+                ApplicationArea = All;
+                Editable = true;
+            }
+            field("Related Party Name"; Rec."Related Party Name")
+            {
+                ApplicationArea = All;
+                Editable = true;
+            }
+
         }
     }
+
 }
