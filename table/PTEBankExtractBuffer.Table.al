@@ -22,7 +22,7 @@ table 50201 "PTE Bank Extract Buffer"
             Caption = 'Line No.';
             DataClassification = CustomerContent;
         }
-        field(10; "Date"; Date)
+        field(10; Date; Date)
         {
             Caption = 'Date';
             DataClassification = CustomerContent;

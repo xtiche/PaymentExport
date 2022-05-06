@@ -2,7 +2,7 @@
   "id": "fc18240b-ff43-4150-b581-4673dac46566",
   "name": "PaymentExport",
   "publisher": "Default publisher",
-  "version": "1.0.0.8",
+  "version": "1.0.0.12",
   "brief": "",
   "description": "",
   "privacyStatement": "",
@@ -13,7 +13,7 @@
   "dependencies": [],
   "screenshots": [],
   "platform": "1.0.0.0",
-  "application": "19.0.0.0",
+  "application": "20.0.0.0",
   "idRanges": [
     {
       "from": 50200,

@@ -12,6 +12,10 @@ pageextension 50202 "PTE Bank Account Card" extends "Bank Account Card"
             {
                 ApplicationArea = All;
             }
+            field("FI Identification"; Rec."FI Identification")
+            {
+                ApplicationArea = All;
+            }
         }
     }
 }

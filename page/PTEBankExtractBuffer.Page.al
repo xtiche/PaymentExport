@@ -3,6 +3,8 @@ page 50201 "PTE Bank Extract Buffer"
     Caption = 'Bank Extract Buffer';
     PageType = List;
     SourceTable = "PTE Bank Extract Buffer";
+    ApplicationArea = All;
+    UsageCategory = Lists;
 
     layout
     {

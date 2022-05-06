@@ -1,5 +1,4 @@
-
-pageextension 50206 "PTEBankLedgerSubForm" extends "Apply Bank Acc. Ledger Entries"
+pageextension 50206 "PTE Apply Bank Acc LE" extends "Apply Bank Acc. Ledger Entries"
 {
     layout
     {
@@ -19,9 +18,6 @@ pageextension 50206 "PTEBankLedgerSubForm" extends "Apply Bank Acc. Ledger Entri
                 ApplicationArea = All;
                 Editable = true;
             }
-
         }
-
     }
-
 }

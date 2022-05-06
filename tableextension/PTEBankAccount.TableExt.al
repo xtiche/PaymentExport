@@ -12,5 +12,9 @@ tableextension 50202 "PTE Bank Account" extends "Bank Account"
             Caption = 'Unique ID Nos.';
             TableRelation = "No. Series";
         }
+        field(50202; "FI Identification"; Boolean)
+        {
+            Caption = 'FI Identification';
+        }
     }
 }
