@@ -220,7 +220,7 @@ codeunit 50204 MatchBankReconciliationLine
                     end;
                     if BankRecMatchCandidates.Transation_Type = '495' then begin
                         RelatedPartyNo := (BankRecMatchCandidates.Related_Party_No_ = BankRecMatchCandidates.Related_Party_No_New);
-                        RelatedPartyName := (BankRecMatchCandidates.Related_Party_Name = BankRecMatchCandidates.Related_Party_Name);
+                        //  RelatedPartyName := (BankRecMatchCandidates.Related_Party_Name = BankRecMatchCandidates.Related_Party_Name);
                     end;
                     ListOfMatchFields := ListOfMatchedFields(AmountMatched, DocumentNoMatched, ExternalDocumentNoMatched, TransactionDateMatched, RelatedPartyMatched, DescriptionMatched, ACHMatch, RelatedPartyNo, RelatedPartyName);
                     TempBankStatementMatchingBuffer."Match Details" := StrSubstNo(MatchDetailsTxt, ListOfMatchFields);
@@ -295,17 +295,25 @@ codeunit 50204 MatchBankReconciliationLine
         else begin
             Score += 1;
         end;
-        if (BankRecMatchCandidates.Related_Party_Name <> BankRecMatchCandidates.Related_Party_Name_New) AND (BankRecMatchCandidates.Transation_Type = '495') then begin
-            Score := 0;
-        end
-        else begin
-            Score += 1;
+        if (BankRecMatchCandidates.Transation_Type = '495') then begin
+
+
+            if (BankRecMatchCandidates.Related_Party_No_ <> BankRecMatchCandidates.Related_Party_No_New) then begin
+                Score := 0;
+            end
+            else begin
+                Score += 1;
+            end;
         end;
-        if (BankRecMatchCandidates.ACH_Batch_No_ <> BankRecMatchCandidates.ACH_Batch_No_New) AND (BankRecMatchCandidates.Transation_Type = '451') then begin
-            Score := 0;
-        end
-        else begin
-            Score += 1;
+        if BankRecMatchCandidates.Transation_Type = '451' then begin
+
+
+            if (BankRecMatchCandidates.ACH_Batch_No_ <> BankRecMatchCandidates.ACH_Batch_No_New) then begin
+                Score := 0;
+            end
+            else begin
+                Score += 1;
+            end;
         end;
         if BankRecMatchCandidates.Rec_Line_Transaction_Date <> 0D then
             case true of

@@ -7,26 +7,25 @@ pageextension 50201 "PTE Payment Journal" extends "Payment Journal"
             field("ACH Batch No."; Rec."ACH Batch No.")
             {
                 ApplicationArea = All;
-                Editable = true;
+                //  Editable = true;
             }
             field("Unique ID"; Rec."Unique ID")
             {
                 ApplicationArea = All;
-                Editable = false;
+                //Editable = false;
             }
             field("ACH Status"; Rec."ACH Status")
             {
                 ApplicationArea = All;
-                Editable = false;
+                //    Editable = false;
             }
             field("ACH Batch Total"; Rec."ACH Batch Total")
             {
                 ApplicationArea = All;
-                Editable = false;
+                //   Editable = false;
             }
         }
     }
-
     actions
     {
         addlast("F&unctions")

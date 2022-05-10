@@ -103,7 +103,6 @@ pageextension 50203 "PTE Bank Acc. Reconciliation" extends "Bank Acc. Reconcilia
                                 LoadDescription := true;
                             end;
                             if (CsvBuffer."Field No." = 2) AND is16 ANd LoadDescription then begin
-
                                 Description := Description + '&' + CsvBuffer.Value;
                                 // ListOfContinuationLine.Add(Format(PrevLine) + '*' + CsvBuffer.Value);
                                 //is16 := false;
@@ -165,7 +164,6 @@ pageextension 50203 "PTE Bank Acc. Reconciliation" extends "Bank Acc. Reconcilia
                                                 if Format(TRansactionTypeTable.Sign) = 'Credit' then begin
                                                     factor := -1;
                                                 end;
-
                                             end;
                                             // if TransactionCodeInt > 400 then factor := -1;
                                             BankAccountRecLine."Statement Amount" := (Int + (Dec / 100)) * factor;
@@ -204,8 +202,6 @@ pageextension 50203 "PTE Bank Acc. Reconciliation" extends "Bank Acc. Reconcilia
                                             end;
                                         end;
                                 end;
-
-
                                 // extractbuffer.Reset();
                                 // extractbuffer.SetFilter("Transaction Number", TransactionNo);
                                 // extractbuffer.SetFilter("Transaction Code", '%1', Format(TransactionCodeInt));
@@ -217,10 +213,10 @@ pageextension 50203 "PTE Bank Acc. Reconciliation" extends "Bank Acc. Reconcilia
                                     ListofCon := element.Split('*');
                                     if ListofCon.Get(1) = Format(CsvBuffer."Line No.") then begin
                                         FullDescription := ListofCon.Get(2);
-                                        if StrLen(FullDescription) > 100
-                                        then begin
+                                        if StrLen(FullDescription) > 100 then begin
                                             BankAccountRecLine.Description := FullDescription.Substring(1, 100).Replace('&', '');
-                                        end else begin
+                                        end
+                                        else begin
                                             BankAccountRecLine.Description := FullDescription.Replace('&', '');
                                         end;
                                     end;
@@ -235,27 +231,18 @@ pageextension 50203 "PTE Bank Acc. Reconciliation" extends "Bank Acc. Reconcilia
                                         if BankAccountRecLine.Description.Contains(ACHPrefix) then begin
                                             DiscriptionList := BankAccountRecLine.Description.Split(' ');
                                             foreach Description88 in DiscriptionList do begin
-                                                if Description88.Contains(ACHPrefix)
-                                                then begin
+                                                if Description88.Contains(ACHPrefix) then begin
                                                     BatchNoList := Description88.Split(ACHPrefix);
-                                                    if BatchNoList.Count > 1
-                                                    then begin
+                                                    if BatchNoList.Count > 1 then begin
                                                         IsInteger := Evaluate(IntVar, BatchNoList.Get(2));
-                                                        if (BatchNoList.Get(2) <> '') AND IsInteger
-                                                        then begin
+                                                        if (BatchNoList.Get(2) <> '') AND IsInteger then begin
                                                             BankAccountRecLine."ACH Batch No." := ACHPrefix + BatchNoList.Get(2);
                                                         end;
-
                                                     end;
-
-
                                                 end;
                                             end;
-
-
                                         end;
                                     end;
-
                                 end;
                                 if TransactionCodeInt = 495 then begin
                                     RelatedPartyName := '';
@@ -268,134 +255,87 @@ pageextension 50203 "PTE Bank Acc. Reconciliation" extends "Bank Acc. Reconcilia
                                                 // if Description88.Contains('BNF ID:=')
                                                 // then begin
                                                 //     BankAccountRecLine."Related-Party Bank Acc. No." := Description88.Split('BNF ID:=').Get(2).Replace(' ', '').Replace(';', '');
-
                                                 // end;
-
-                                                if Description88.Contains('BNF NAME:=')
-                                                 then begin
+                                                if Description88.Contains('BNF NAME:=') then begin
                                                     BankAccountRecLine."Related Party Name" := Description88.Split('BNF NAME:=').Get(2).Replace(';', '');
                                                     RelatedPartyName := Description88.Split('BNF NAME:=').Get(2).Replace(';', '').Replace(';', '');
                                                 end;
-                                                if RelatedPartyName <> ''
-                                                then begin
-
-
+                                                if RelatedPartyName <> '' then begin
                                                     Vendor.Reset();
                                                     Vendor.SetFilter(Vendor.Name, '@' + RelatedPartyName + '*');
-                                                    if Vendor.FindFirst()
-                                                    then begin
+                                                    if Vendor.FindFirst() then begin
                                                         BankAccountRecLine."Related Party No." := Vendor."No.";
                                                         //  BankAccountRecLine."Related-Party Address" := Vendor.Address;
                                                         BankAccountRecLine."Related-Party Name" := Vendor.Name;
                                                         // BankAccountRecLine."Related-Party City" := Vendor.City;
                                                     end;
                                                 end;
-
-
-
                                             end;
-
-                                        end else begin
+                                        end
+                                        else begin
                                             foreach Description88 in DiscriptionList do begin
                                                 // if Description88.Contains('BNF ID:=')
                                                 // then begin
                                                 //     BankAccountRecLine."Related-Party Bank Acc. No." := Description88.Split('BNF ID:=').Get(2).Replace(' ', '').Replace(';', '');
-
                                                 // end;
-
-                                                if Description88.Contains('REC ID:=')
-                                                 then begin
+                                                if Description88.Contains('REC ID:=') then begin
                                                     FIID := Description88.Split('REC ID:=').Get(2).Replace(';', '');
-
                                                 end;
-                                                if FIID <> ''
-                                                then begin
+                                                if FIID <> '' then begin
                                                     VendorBAnkAccount.Reset();
                                                     VendorBAnkAccount.SetFilter(VendorBAnkAccount.FIID, FIID);
-                                                    if VendorBAnkAccount.FindFirst()
-                                                then begin
-
+                                                    if VendorBAnkAccount.FindFirst() then begin
                                                         Vendor.SetFilter(Vendor."No.", '@' + VendorBAnkAccount."Vendor No." + '*');
-                                                        if Vendor.FindFirst()
-                                                        then begin
+                                                        if Vendor.FindFirst() then begin
                                                             BankAccountRecLine."Related Party No." := Vendor."No.";
                                                             //  BankAccountRecLine."Related-Party Address" := Vendor.Address;
                                                             BankAccountRecLine."Related-Party Name" := Vendor.Name;
                                                             // BankAccountRecLine."Related-Party City" := Vendor.City;
                                                         end;
                                                     end;
-
-
                                                 end;
-
-
-
                                             end;
                                         end;
                                     end;
                                 end;
-                                if TransactionCodeInt = 495
-                               then begin
+                                if TransactionCodeInt = 495 then begin
                                     RelatedPartyName := '';
                                     DiscriptionList := FullDescription.Split('&');
                                     foreach Description88 in DiscriptionList do begin
                                         // if Description88.Contains('BNF ID:=')
                                         // then begin
                                         //     BankAccountRecLine."Related-Party Bank Acc. No." := Description88.Split('BNF ID:=').Get(2).Replace(' ', '').Replace(';', '');
-
                                         // end;
-
-                                        if Description88.Contains('BNF NAME:=')
-                                         then begin
+                                        if Description88.Contains('BNF NAME:=') then begin
                                             BankAccountRecLine."Related Party Name" := Description88.Split('BNF NAME:=').Get(2).Replace(';', '');
                                             RelatedPartyName := Description88.Split('BNF NAME:=').Get(2).Replace(';', '').Replace(';', '');
                                         end;
-                                        if RelatedPartyName <> ''
-                                        then begin
-
-
+                                        if RelatedPartyName <> '' then begin
                                             Vendor.Reset();
                                             Vendor.SetFilter(Vendor.Name, '@' + RelatedPartyName + '*');
-                                            if Vendor.FindFirst()
-                                            then begin
+                                            if Vendor.FindFirst() then begin
                                                 BankAccountRecLine."Related Party No." := Vendor."No.";
                                                 //  BankAccountRecLine."Related-Party Address" := Vendor.Address;
                                                 BankAccountRecLine."Related-Party Name" := Vendor.Name;
                                                 // BankAccountRecLine."Related-Party City" := Vendor.City;
                                             end;
                                         end;
-
-
-
                                     end;
-
-
                                 end;
-                                if TransactionCodeInt = 195
-                                then begin
+                                if TransactionCodeInt = 195 then begin
                                     RelatedPartyName := '';
                                     DiscriptionList := FullDescription.Split('&');
                                     foreach Description88 in DiscriptionList do begin
                                         // if Description88.Contains('BNF ID:=')
                                         // then begin
                                         //     BankAccountRecLine."Related-Party Bank Acc. No." := Description88.Split('BNF ID:=').Get(2).Replace(' ', '').Replace(';', '');
-
                                         // end;
-
-                                        if Description88.Contains('ORG:=')
-                                         then begin
+                                        if Description88.Contains('ORG:=') then begin
                                             BankAccountRecLine."Related Party Name" := Description88.Split('ORG:=').Get(2).Replace(';', '');
                                             RelatedPartyName := Description88.Split('ORG:=').Get(2).Replace(';', '').Replace(';', '');
                                         end;
-
-
-
-
                                     end;
-
-
                                 end;
-
                             until CsvBuffer.Next() = 0;
                         BankAccountRecLine.Insert();
                         UploadCount := UploadCount + 1;
@@ -420,11 +360,70 @@ pageextension 50203 "PTE Bank Acc. Reconciliation" extends "Bank Acc. Reconcilia
 
                 trigger OnAction()
                 var
+
+                    TempBankAccReconciliationLine: Record "Bank Acc. Reconciliation Line" temporary;
+                    TempBankAccountLedgerEntry: Record "Bank Account Ledger Entry";
+                    MatchBankRecLines: Codeunit "Match Bank Rec. Lines";
+                    BankAccountReconciliation: Record "Bank Acc. Reconciliation Line";
+                    SumofRemainingAmount: Decimal;
+                    PaymentMatchingDetails: Record "Payment Matching Details";
+                    BankAccEntrySetReconNo: Codeunit "Bank Acc. Entry Set Recon.-No.";
+                    BankAccountLedgerEntry: Record "Bank Account Ledger Entry";
+                    Relation: Option "One-to-One","One-to-Many","Many-to-One";
+                    TempBankCount: Integer;
+                    MatchedManuallyTxt: Label 'This statement line was matched manually.';
                 begin
                     Rec.SetRange("Statement Type", Rec."Statement Type");
                     Rec.SetRange("Bank Account No.", Rec."Bank Account No.");
                     Rec.SetRange("Statement No.", Rec."Statement No.");
                     REPORT.Run(REPORT::"Match Bank Entries New", true, true, Rec);
+                    Commit();
+                    BankAccountReconciliation.Reset();
+                    BankAccountReconciliation.SetFilter(BankAccountReconciliation."ACH Batch No.", '<>%1', '');
+                    BankAccountReconciliation.SetFilter(BankAccountReconciliation."Bank Account No.", Rec."Bank Account No.");
+                    if BankAccountReconciliation.FindSet()
+                      then
+                        repeat
+                            TempBankAccReconciliationLine.Reset();
+                            TempBankAccountLedgerEntry.SetFilter(TempBankAccountLedgerEntry."ACH Batch No.", BankAccountReconciliation."ACH Batch No.");
+                            TempBankAccountLedgerEntry.SetFilter(TempBankAccountLedgerEntry."Bank Account No.", Rec."Bank Account No.");
+                            // TempBankCount := TempBankAccountLedgerEntry.Count();
+                            TempBankCount := 0;
+                            if TempBankAccountLedgerEntry.FindSet()
+                            then
+                                repeat
+                                    TempBankCount := TempBankCount + 1;
+                                until TempBankAccountLedgerEntry.Next() = 0;
+                            TempBankAccReconciliationLine.Reset();
+                            TempBankAccountLedgerEntry.SetFilter("ACH Batch No.", BankAccountReconciliation."ACH Batch No.");
+                            TempBankAccountLedgerEntry.SetFilter("Bank Account No.", BankAccountReconciliation."Bank Account No.");
+
+                            if TempBankAccountLedgerEntry.FindSet()
+                            then
+                                repeat
+                                    if TempBankCount > 1
+                                    then begin
+
+
+                                        BankAccountLedgerEntry.Get(TempBankAccountLedgerEntry."Entry No.");
+                                        BankAccEntrySetReconNo.RemoveApplication(BankAccountLedgerEntry);
+                                        BankAccEntrySetReconNo.ApplyEntries(BankAccountReconciliation, BankAccountLedgerEntry, Relation::"One-to-Many");
+                                        PaymentMatchingDetails.CreatePaymentMatchingDetail(BankAccountReconciliation, MatchedManuallyTxt);
+                                    end;
+                                    if TempBankCount = 1 then begin
+                                        BankAccountLedgerEntry.Get(TempBankAccountLedgerEntry."Entry No.");
+                                        BankAccEntrySetReconNo.RemoveApplication(BankAccountLedgerEntry);
+                                        BankAccEntrySetReconNo.ApplyEntries(BankAccountReconciliation, BankAccountLedgerEntry, Relation::"One-to-One");
+                                        PaymentMatchingDetails.CreatePaymentMatchingDetail(BankAccountReconciliation, MatchedManuallyTxt);
+
+                                    end;
+                                until TempBankAccountLedgerEntry.Next() = 0;
+                        until BankAccountReconciliation.Next() = 0;
+
+
+                    // CurrPage.StmtLine.PAGE.GetSelectedRecords(TempBankAccReconciliationLine);
+                    // CurrPage.ApplyBankLedgerEntries.PAGE.GetSelectedRecords(TempBankAccountLedgerEntry);
+                    // MatchBankRecLines.MatchManually(TempBankAccReconciliationLine, TempBankAccountLedgerEntry);
                 end;
             }
         }
