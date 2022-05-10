@@ -1,5 +1,5 @@
 {
-    "al.codeAnalyzers": ["${CodeCop}"],
+    "al.codeAnalyzers": ["${CodeCop}","${PerTenantExtensionCop}"],
     "al.enableCodeAnalysis": true,
     "al.backgroundCodeAnalysis": true,
     "al.ruleSetPath": "./ruleset.json",
