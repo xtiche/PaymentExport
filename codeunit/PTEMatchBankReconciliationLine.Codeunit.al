@@ -215,9 +215,9 @@ codeunit 50204 MatchBankReconciliationLine
                     DocumentNoMatched := (RecordMatchMgt.CalculateStringNearness(BankRecMatchCandidates.Rec_Line_Description, BankRecMatchCandidates.Document_No, GetMatchLengthTreshold(), GetNormalizingFactor()) = GetNormalizingFactor()) or (RecordMatchMgt.CalculateStringNearness(BankRecMatchCandidates.Rec_Line_Transaction_Info, BankRecMatchCandidates.Document_No, GetMatchLengthTreshold(), GetNormalizingFactor()) = GetNormalizingFactor());
                     ExternalDocumentNoMatched := (RecordMatchMgt.CalculateStringNearness(BankRecMatchCandidates.Rec_Line_Description, BankRecMatchCandidates.External_Document_No, GetMatchLengthTreshold(), GetNormalizingFactor()) = GetNormalizingFactor()) or (RecordMatchMgt.CalculateStringNearness(BankRecMatchCandidates.Rec_Line_Transaction_Info, BankRecMatchCandidates.External_Document_No, GetMatchLengthTreshold(), GetNormalizingFactor()) = GetNormalizingFactor());
                     DescriptionMatched := (RecordMatchMgt.CalculateStringNearness(BankRecMatchCandidates.Rec_Line_Description, BankRecMatchCandidates.Description, GetMatchLengthTreshold(), GetNormalizingFactor()) >= 0.8 * GetNormalizingFactor()) or (RecordMatchMgt.CalculateStringNearness(BankRecMatchCandidates.Rec_Line_Transaction_Info, BankRecMatchCandidates.Description, GetMatchLengthTreshold(), GetNormalizingFactor()) >= 0.8 * GetNormalizingFactor());
-                    if BankRecMatchCandidates.Transation_Type = '451' then begin
-                        ACHMatch := (BankRecMatchCandidates.ACH_Batch_No_ = BankRecMatchCandidates.ACH_Batch_No_New);
-                    end;
+                    //  if BankRecMatchCandidates.Transation_Type = '451' then begin
+                    ACHMatch := (BankRecMatchCandidates.ACH_Batch_No_ = BankRecMatchCandidates.ACH_Batch_No_New);
+                    //end;
                     if BankRecMatchCandidates.Transation_Type = '495' then begin
                         RelatedPartyNo := (BankRecMatchCandidates.Related_Party_No_ = BankRecMatchCandidates.Related_Party_No_New);
                         //  RelatedPartyName := (BankRecMatchCandidates.Related_Party_Name = BankRecMatchCandidates.Related_Party_Name);
@@ -305,16 +305,16 @@ codeunit 50204 MatchBankReconciliationLine
                 Score += 1;
             end;
         end;
-        if BankRecMatchCandidates.Transation_Type = '451' then begin
+        //   if BankRecMatchCandidates.Transation_Type = '451' then begin
 
 
-            if (BankRecMatchCandidates.ACH_Batch_No_ <> BankRecMatchCandidates.ACH_Batch_No_New) then begin
-                Score := 0;
-            end
-            else begin
-                Score += 1;
-            end;
+        if (BankRecMatchCandidates.ACH_Batch_No_ <> BankRecMatchCandidates.ACH_Batch_No_New) then begin
+            Score := 0;
+        end
+        else begin
+            Score += 1;
         end;
+        // end;
         if BankRecMatchCandidates.Rec_Line_Transaction_Date <> 0D then
             case true of
                 BankRecMatchCandidates.Rec_Line_Transaction_Date = BankRecMatchCandidates.Posting_Date:

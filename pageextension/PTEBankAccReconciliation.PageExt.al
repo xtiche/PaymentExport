@@ -75,6 +75,8 @@ pageextension 50203 "PTE Bank Acc. Reconciliation" extends "Bank Acc. Reconcilia
                     ACHPrefix: Text;
                     IntVar: Integer;
                     IsInteger: Boolean;
+                    BankAccountFound: Boolean;
+                    VendorName: Text[250];
                 begin
                     UploadCount := 0;
                     uploadResult := UploadIntoStream(DialogCaption, '', '', BaiFileName, Ins);
@@ -222,6 +224,7 @@ pageextension 50203 "PTE Bank Acc. Reconciliation" extends "Bank Acc. Reconcilia
                                     end;
                                 END;
                                 //     if TransactionCodeInt = 451 then begin
+                                ACHPrefix := '';
                                 TRansactionTypeTable.Reset();
                                 TRansactionTypeTable.SetFilter(TRansactionTypeTable.Code, Format(TransactionCodeInt));
                                 TRansactionTypeTable.SetFilter(TRansactionTypeTable.Sign, 'Credit');
@@ -274,55 +277,78 @@ pageextension 50203 "PTE Bank Acc. Reconciliation" extends "Bank Acc. Reconcilia
                                             end;
                                         end
                                         else begin
+                                            DiscriptionList := FullDescription.Split('&');
+                                            FIID := '';
+                                            BankAccountFound := false;
                                             foreach Description88 in DiscriptionList do begin
                                                 // if Description88.Contains('BNF ID:=')
                                                 // then begin
                                                 //     BankAccountRecLine."Related-Party Bank Acc. No." := Description88.Split('BNF ID:=').Get(2).Replace(' ', '').Replace(';', '');
                                                 // end;
-                                                if Description88.Contains('REC ID:=') then begin
-                                                    FIID := Description88.Split('REC ID:=').Get(2).Replace(';', '');
+
+
+                                                if Description88.Contains('BNF ID:=') then begin
+                                                    FIID := Description88.Split('BNF ID:=').Get(2).Replace(';', '');
                                                 end;
+
                                                 if FIID <> '' then begin
                                                     VendorBAnkAccount.Reset();
+                                                    VendorBAnkAccount.SetFilter(VendorBAnkAccount.FIID, '<>%1', '');
                                                     VendorBAnkAccount.SetFilter(VendorBAnkAccount.FIID, FIID);
-                                                    if VendorBAnkAccount.FindFirst() then begin
-                                                        Vendor.SetFilter(Vendor."No.", '@' + VendorBAnkAccount."Vendor No." + '*');
-                                                        if Vendor.FindFirst() then begin
-                                                            BankAccountRecLine."Related Party No." := Vendor."No.";
-                                                            //  BankAccountRecLine."Related-Party Address" := Vendor.Address;
-                                                            BankAccountRecLine."Related-Party Name" := Vendor.Name;
-                                                            // BankAccountRecLine."Related-Party City" := Vendor.City;
-                                                        end;
+                                                    if VendorBAnkAccount.FindSet() then
+                                                        repeat
+                                                            // if VendorBAnkAccount.FIID <> ''
+                                                            // then begin
+                                                            //     if VendorBAnkAccount.FIID = FIID
+                                                            //     then begin
+
+
+                                                            Vendor.Reset();
+                                                            Vendor.SetFilter(Vendor."No.", '@' + VendorBAnkAccount."Vendor No." + '*');
+                                                            if Vendor.FindFirst() then begin
+                                                                BankAccountRecLine."Related Party No." := Vendor."No.";
+
+                                                                BankAccountFound := true;
+                                                                break;
+                                                            end;
+
+                                                        //     end;
+                                                        // end;
+                                                        until VendorBAnkAccount.Next() = 0;
+                                                    if Description88.Contains('BNF NAME:=') then begin
+                                                        BankAccountRecLine."Related Party Name" := Description88.Split('BNF NAME:=').Get(2).Replace(';', '');
+
+
                                                     end;
                                                 end;
                                             end;
                                         end;
                                     end;
                                 end;
-                                if TransactionCodeInt = 495 then begin
-                                    RelatedPartyName := '';
-                                    DiscriptionList := FullDescription.Split('&');
-                                    foreach Description88 in DiscriptionList do begin
-                                        // if Description88.Contains('BNF ID:=')
-                                        // then begin
-                                        //     BankAccountRecLine."Related-Party Bank Acc. No." := Description88.Split('BNF ID:=').Get(2).Replace(' ', '').Replace(';', '');
-                                        // end;
-                                        if Description88.Contains('BNF NAME:=') then begin
-                                            BankAccountRecLine."Related Party Name" := Description88.Split('BNF NAME:=').Get(2).Replace(';', '');
-                                            RelatedPartyName := Description88.Split('BNF NAME:=').Get(2).Replace(';', '').Replace(';', '');
-                                        end;
-                                        if RelatedPartyName <> '' then begin
-                                            Vendor.Reset();
-                                            Vendor.SetFilter(Vendor.Name, '@' + RelatedPartyName + '*');
-                                            if Vendor.FindFirst() then begin
-                                                BankAccountRecLine."Related Party No." := Vendor."No.";
-                                                //  BankAccountRecLine."Related-Party Address" := Vendor.Address;
-                                                BankAccountRecLine."Related-Party Name" := Vendor.Name;
-                                                // BankAccountRecLine."Related-Party City" := Vendor.City;
-                                            end;
-                                        end;
-                                    end;
-                                end;
+                                // if TransactionCodeInt = 495 then begin
+                                //     RelatedPartyName := '';
+                                //     DiscriptionList := FullDescription.Split('&');
+                                //     foreach Description88 in DiscriptionList do begin
+                                //         // if Description88.Contains('BNF ID:=')
+                                //         // then begin
+                                //         //     BankAccountRecLine."Related-Party Bank Acc. No." := Description88.Split('BNF ID:=').Get(2).Replace(' ', '').Replace(';', '');
+                                //         // end;
+                                //         if Description88.Contains('BNF NAME:=') then begin
+                                //             BankAccountRecLine."Related Party Name" := Description88.Split('BNF NAME:=').Get(2).Replace(';', '');
+                                //             RelatedPartyName := Description88.Split('BNF NAME:=').Get(2).Replace(';', '').Replace(';', '');
+                                //         end;
+                                //         if RelatedPartyName <> '' then begin
+                                //             Vendor.Reset();
+                                //             Vendor.SetFilter(Vendor.Name, '@' + RelatedPartyName + '*');
+                                //             if Vendor.FindFirst() then begin
+                                //                 BankAccountRecLine."Related Party No." := Vendor."No.";
+                                //                 //  BankAccountRecLine."Related-Party Address" := Vendor.Address;
+                                //                 BankAccountRecLine."Related-Party Name" := Vendor.Name;
+                                //                 // BankAccountRecLine."Related-Party City" := Vendor.City;
+                                //             end;
+                                //         end;
+                                //     end;
+                                // end;
                                 if TransactionCodeInt = 195 then begin
                                     RelatedPartyName := '';
                                     DiscriptionList := FullDescription.Split('&');
