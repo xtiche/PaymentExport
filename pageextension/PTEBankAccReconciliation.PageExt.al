@@ -221,29 +221,30 @@ pageextension 50203 "PTE Bank Acc. Reconciliation" extends "Bank Acc. Reconcilia
                                         end;
                                     end;
                                 END;
-                                if TransactionCodeInt = 451 then begin
-                                    TRansactionTypeTable.Reset();
-                                    TRansactionTypeTable.SetFilter(TRansactionTypeTable.Code, Format(TransactionCodeInt));
-                                    if TRansactionTypeTable.FindFirst() then begin
-                                        ACHPrefix := TRansactionTypeTable."ACH Prefix";
-                                    end;
-                                    if ACHPrefix <> '' then begin
-                                        if BankAccountRecLine.Description.Contains(ACHPrefix) then begin
-                                            DiscriptionList := BankAccountRecLine.Description.Split(' ');
-                                            foreach Description88 in DiscriptionList do begin
-                                                if Description88.Contains(ACHPrefix) then begin
-                                                    BatchNoList := Description88.Split(ACHPrefix);
-                                                    if BatchNoList.Count > 1 then begin
-                                                        IsInteger := Evaluate(IntVar, BatchNoList.Get(2));
-                                                        if (BatchNoList.Get(2) <> '') AND IsInteger then begin
-                                                            BankAccountRecLine."ACH Batch No." := ACHPrefix + BatchNoList.Get(2);
-                                                        end;
+                                //     if TransactionCodeInt = 451 then begin
+                                TRansactionTypeTable.Reset();
+                                TRansactionTypeTable.SetFilter(TRansactionTypeTable.Code, Format(TransactionCodeInt));
+                                TRansactionTypeTable.SetFilter(TRansactionTypeTable.Sign, 'Credit');
+                                if TRansactionTypeTable.FindFirst() then begin
+                                    ACHPrefix := TRansactionTypeTable."ACH Prefix";
+                                end;
+                                if ACHPrefix <> '' then begin
+                                    if BankAccountRecLine.Description.Contains(ACHPrefix) then begin
+                                        DiscriptionList := BankAccountRecLine.Description.Split(' ');
+                                        foreach Description88 in DiscriptionList do begin
+                                            if Description88.Contains(ACHPrefix) then begin
+                                                BatchNoList := Description88.Split(ACHPrefix);
+                                                if BatchNoList.Count > 1 then begin
+                                                    IsInteger := Evaluate(IntVar, BatchNoList.Get(2));
+                                                    if (BatchNoList.Get(2) <> '') AND IsInteger then begin
+                                                        BankAccountRecLine."ACH Batch No." := ACHPrefix + BatchNoList.Get(2);
                                                     end;
                                                 end;
                                             end;
                                         end;
                                     end;
                                 end;
+                                //   end;
                                 if TransactionCodeInt = 495 then begin
                                     RelatedPartyName := '';
                                     BankAccounts.Reset();
