@@ -251,7 +251,7 @@ pageextension 50203 "PTE Bank Acc. Reconciliation" extends "Bank Acc. Reconcilia
                                 if TransactionCodeInt = 495 then begin
                                     RelatedPartyName := '';
                                     BankAccounts.Reset();
-                                    BankAccounts.SetFilter(BankAccounts."Bank Account No.", '7844269662');
+                                    BankAccounts.SetFilter(BankAccounts."Bank Account No.", '3303579341');
                                     if BankAccounts.FindFirst() then begin
                                         if BankAccounts."FI Identification" = false then begin
                                             DiscriptionList := FullDescription.Split('&');
