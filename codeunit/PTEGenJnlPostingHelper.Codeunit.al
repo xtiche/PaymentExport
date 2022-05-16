@@ -25,7 +25,8 @@ codeunit 50201 "PTE Gen. Jnl Posting Helper"
         GenJnlTemplate: Record "Gen. Journal Template";
     begin
         if GenJnlTemplate.Get(GenJournalLine."Journal Template Name") and
-            (GenJnlTemplate."Page ID" = Page::"Payment Journal")
+            (GenJnlTemplate."Page ID" = Page::"Payment Journal") and
+            (GenJournalLine."ACH Batch No." <> '')
         then
             GenJournalLine.TestField("ACH Status", GenJournalLine."ACH Status"::Paid);
     end;
